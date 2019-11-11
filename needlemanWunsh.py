@@ -1,5 +1,6 @@
 import numpy as np
 from config import Config
+from node import Node
 
 DIFF = -1
 LEFT = "L"
@@ -49,27 +50,32 @@ class NeedlemanWunsh:
                     direction_matrix [i][j] = value
         return matrix, direction_matrix
 
+
     def calculate_result(self, matrix, direction_matrix, seq_a, seq_b, file_path):
         f = open(file_path, 'w')
-        flag = True
         score = matrix[len(seq_a)][len(seq_b)]
         f.write('SCORE=' + str(score) + '\n')
         f.write('\n')
-        while(flag):
-            flag = False
-            row = len(seq_a)
-            col = len(seq_b)
-            res_a = ""
-            res_b = ""
-            current_direction = direction_matrix[row][col]
-            p_x = 0
-            p_y = 0
+
+        n = Node('', '', len(seq_a), len(seq_b), direction_matrix[len(seq_a)][len(seq_b)])
+        l = []
+        l.append(n)
+
+        while (len(l)):
+            flag = True
+            row = l[0].co_x
+            col = l[0].co_y
+            res_a = l[0].seq_a
+            res_b = l[0].seq_b
+            current_direction = l[0].current_direction
             while (current_direction is not None) and (row > 0) and (col > 0):
                 if len(current_direction) > 1:
-                    p_x = row
-                    p_y = col
-                    flag = True
-                    current_direction = current_direction[len(current_direction)-1]
+                    l.remove(l[0])
+                    for i in range(len(current_direction)):
+                        m = Node(res_a, res_b, row, col, current_direction[i])
+                        l.append(m)
+                    flag = False
+                    break
                 if current_direction == LEFT:
                     res_a = "_" + res_a
                     res_b = seq_b[col - 1] + res_b
@@ -82,13 +88,12 @@ class NeedlemanWunsh:
                     res_a = seq_a[row - 1] + res_a
                     res_b = seq_b[col - 1] + res_b
                     row = row - 1
-                    col = col -1
+                    col = col - 1
                 current_direction = direction_matrix[row][col]
-            f.write(res_a + '\n')
-            f.write(res_b + '\n')
-            f.write('\n')
-            if flag:
-                direction_matrix[p_x][p_y] = direction_matrix[p_x][p_y][:-1]
+            if(flag):
+                f.write(res_a + '\n')
+                f.write(res_b + '\n')
+                f.write('\n')
+                l.remove(l[0])
         f.close()
-
 
