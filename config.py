@@ -1,4 +1,5 @@
 class Config:
+    # store config values
     SAME: int
     DIFF: int
     GAP_PENALTY: int

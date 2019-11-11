@@ -1,4 +1,5 @@
 class Alignment:
+    # store alignment pairs
     res_a: str
     res_b: str
 

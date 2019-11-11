@@ -4,8 +4,10 @@ from throwExceptions import WrongConfigInput
 from throwExceptions import SequenceTooLongException
 from config import Config
 
+
 class ReadFile:
 
+    # read sequence file
     def seq_path(self, filepath, config=Config):
         with open(filepath, "r") as f:
             line = f.readline()
@@ -17,11 +19,13 @@ class ReadFile:
         f.close()
         return seq
 
+    # read config file
     def get_config(self, filepath):
 
-        def check_config(field, required_fileds):
-            if field not in required_fileds:
-                raise WrongConfigInput("The {filed} is missing from the config file.")
+        # check id config file contains all required arguments
+        def check_config(required, config_parameters):
+            if required not in config_parameters:
+                raise WrongConfigInput('The ' + required + ' is missing from the config file.')
 
         required_fields = [
             "same",
@@ -37,16 +41,17 @@ class ReadFile:
         for field in required_fields:
             check_config(field, dict(config["DEFAULT"]))
 
-        GAP_PENALTY = config["DEFAULT"].getint("GAP_PENALTY")
-        SAME = config["DEFAULT"].getint("SAME")
-        DIFF = config["DEFAULT"].getint("DIFF")
-        MAX_SEQ_LENGTH = config["DEFAULT"].getint("MAX_SEQ_LENGTH")
-        MAX_NUMBER_PATHS = config["DEFAULT"].getint("MAX_NUMBER_PATHS")
+        gap_penalty = config["DEFAULT"].getint("GAP_PENALTY")
+        same = config["DEFAULT"].getint("SAME")
+        diff = config["DEFAULT"].getint("DIFF")
+        max_seq_length = config["DEFAULT"].getint("MAX_SEQ_LENGTH")
+        max_number_paths = config["DEFAULT"].getint("MAX_NUMBER_PATHS")
 
-        if MAX_SEQ_LENGTH < 0:
+        # check value of the config file
+        if max_seq_length < 0:
             raise WrongConfigInput("it should be a positive number")
 
-        if MAX_NUMBER_PATHS < 0:
+        if max_number_paths < 0:
             raise WrongConfigInput("it should be a positive number")
 
-        return Config(SAME, DIFF, GAP_PENALTY, MAX_SEQ_LENGTH, MAX_NUMBER_PATHS)
+        return Config(same, diff, gap_penalty, max_seq_length, max_number_paths)

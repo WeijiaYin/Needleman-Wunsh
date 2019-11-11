@@ -11,12 +11,26 @@ DIAGONAL = "D"
 class NeedlemanWunsh:
 
     def calculate_diagonal(self, a,b, config = Config):
+        """
+        calculate the digonal value
+        :param a: current character from sequence a
+        :param b: current chatacter from sequence n
+        :param config: config value read in config file
+        :return:
+        """
         if a == b:
             return config.SAME
         if a != b:
             return config.DIFF
 
     def calculate_matrix(self, seq_a, seq_b, config = Config):
+        """
+        get score matrix and direction matrix
+        :param seq_a: sequence a
+        :param seq_b: sequence b
+        :param config: config values get from config file
+        :return: score matrix and direction matrix
+        """
         seq_a = "_" + seq_a
         seq_b = "_" + seq_b
 
@@ -51,6 +65,22 @@ class NeedlemanWunsh:
         return matrix, direction_matrix
 
     def calculate_result(self, matrix, direction_matrix, seq_a, seq_b, config = Config):
+        """
+        calculate score and alignment pairs
+        :param matrix: score matrix
+        :param direction_matrix: direction matrix
+        :param seq_a: sequence a
+        :param seq_b: sequence b
+        :param config: config value get from config file
+        :return: score and aligment pairs
+        """
+
+        '''
+        l is to store all the possible paths
+        when the direction is more than 1,remove the origin one, 
+        add all the possibilities at the end of the return sequence and store them in l
+        '''
+
         score = matrix[len(seq_a)][len(seq_b)]
 
         n = Node('', '', len(seq_a), len(seq_b), direction_matrix[len(seq_a)][len(seq_b)])
@@ -91,6 +121,7 @@ class NeedlemanWunsh:
                 al = Alignment(res_a, res_b)
                 res.append(al)
                 l.remove(l[0])
+                # if number of pairs equals to the max number path in the config file, stop the algorithm
                 if len(res) == config.MAX_NUMBER_PATH:
                     break
         return score, res

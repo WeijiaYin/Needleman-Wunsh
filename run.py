@@ -3,6 +3,7 @@ from needlemanWunsh import NeedlemanWunsh
 from readFile import ReadFile
 
 if __name__ == '__main__':
+    # parse arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', type=str, help='Path to the a sequence', required=True, dest='seq_a')
     parser.add_argument('-b', type=str, help='Path to the b sequence', required=True, dest='seq_b')
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     nw = NeedlemanWunsh()
     mat, directmat = nw.calculate_matrix(rf.seq_path(args.seq_a, config), rf.seq_path(args.seq_b, config), config)
     score, alignments = nw.calculate_result(mat, directmat, rf.seq_path(args.seq_a, config), rf.seq_path(args.seq_b, config), config)
+    # write results to file
     f = open(args.output_path, 'w')
     f.write('SCORE=' + str(score) + '\n')
     f.write('\n')
