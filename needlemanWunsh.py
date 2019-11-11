@@ -2,7 +2,6 @@ import numpy as np
 from config import Config
 from node import Node
 
-DIFF = -1
 LEFT = "L"
 UP = "U"
 DIAGONAL = "D"
@@ -50,7 +49,6 @@ class NeedlemanWunsh:
                     direction_matrix [i][j] = value
         return matrix, direction_matrix
 
-
     def calculate_result(self, matrix, direction_matrix, seq_a, seq_b, file_path):
         f = open(file_path, 'w')
         score = matrix[len(seq_a)][len(seq_b)]
@@ -61,7 +59,7 @@ class NeedlemanWunsh:
         l = []
         l.append(n)
 
-        while (len(l)):
+        while len(l):
             flag = True
             row = l[0].co_x
             col = l[0].co_y
