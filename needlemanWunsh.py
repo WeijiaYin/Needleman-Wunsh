@@ -1,6 +1,7 @@
 import numpy as np
 from config import Config
 from node import Node
+from alignment import Alignment
 
 LEFT = "L"
 UP = "U"
@@ -49,15 +50,13 @@ class NeedlemanWunsh:
                     direction_matrix [i][j] = value
         return matrix, direction_matrix
 
-    def calculate_result(self, matrix, direction_matrix, seq_a, seq_b, file_path):
-        f = open(file_path, 'w')
+    def calculate_result(self, matrix, direction_matrix, seq_a, seq_b, config = Config):
         score = matrix[len(seq_a)][len(seq_b)]
-        f.write('SCORE=' + str(score) + '\n')
-        f.write('\n')
 
         n = Node('', '', len(seq_a), len(seq_b), direction_matrix[len(seq_a)][len(seq_b)])
         l = []
         l.append(n)
+        res = []
 
         while len(l):
             flag = True
@@ -88,10 +87,11 @@ class NeedlemanWunsh:
                     row = row - 1
                     col = col - 1
                 current_direction = direction_matrix[row][col]
-            if(flag):
-                f.write(res_a + '\n')
-                f.write(res_b + '\n')
-                f.write('\n')
+            if flag:
+                al = Alignment(res_a, res_b)
+                res.append(al)
                 l.remove(l[0])
-        f.close()
+                if len(res) == config.MAX_NUMBER_PATH:
+                    break
+        return score, res
 

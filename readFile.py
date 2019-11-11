@@ -14,6 +14,7 @@ class ReadFile:
             seq = f.read().replace("\n","")
             if len(seq) > config.MAX_SEQ_LENGTH:
                 raise SequenceTooLongException("The sequence can't be longer than the MAX_SEQ_LENTH")
+        f.close()
         return seq
 
     def get_config(self, filepath):

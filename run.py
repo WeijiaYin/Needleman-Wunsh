@@ -14,4 +14,13 @@ if __name__ == '__main__':
     config = rf.get_config(args.config_path)
     nw = NeedlemanWunsh()
     mat, directmat = nw.calculate_matrix(rf.seq_path(args.seq_a, config), rf.seq_path(args.seq_b, config), config)
-    nw.calculate_result(mat, directmat, rf.seq_path(args.seq_a, config), rf.seq_path(args.seq_b, config), args.output_path)
+    score, alignments = nw.calculate_result(mat, directmat, rf.seq_path(args.seq_a, config), rf.seq_path(args.seq_b, config), config)
+    f = open(args.output_path, 'w')
+    f.write('SCORE=' + str(score) + '\n')
+    f.write('\n')
+    for i in range(len(alignments)):
+        f.write(alignments[i].res_a + '\n')
+        f.write(alignments[i].res_b + '\n')
+        f.write('\n')
+    f.close()
+
