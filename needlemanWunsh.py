@@ -95,7 +95,7 @@ class NeedlemanWunsh:
             res_a = l[0].seq_a
             res_b = l[0].seq_b
             current_direction = l[0].current_direction
-            while (current_direction is not None) and (row > 0) and (col > 0):
+            while (current_direction is not None) and (row >= 0) and (col >= 0):
                 if len(current_direction) > 1:
                     l.remove(l[0])
                     for i in range(len(current_direction)):
